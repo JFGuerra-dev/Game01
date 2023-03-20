@@ -2,6 +2,7 @@ package br.com.softwargames.entities;
 
 import br.com.softwargames.main.Game;
 import br.com.softwargames.world.Camera;
+import org.w3c.dom.css.Rect;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,6 +20,10 @@ public class Entity {
     protected int width;
     protected int heigth;
     private BufferedImage sprite;
+    private int maskX;
+    private int maskY;
+    private int maskWidth;
+    private int maskHeigth;
 
     public Entity(double x, double y, int width, int heigth, BufferedImage sprite) {
         this.x = x;
@@ -26,6 +31,18 @@ public class Entity {
         this.width = width;
         this.heigth = heigth;
         this.sprite = sprite;
+
+        this.maskX = 0;
+        this.maskY = 0;
+        this.maskWidth = width;
+        this.maskHeigth = heigth;
+    }
+
+    public void setMask(int maskX, int maskY, int maskWidth, int maskHeigth){
+        this.maskX = maskX;
+        this.maskY = maskY;
+        this.maskWidth = maskWidth;
+        this.maskHeigth = maskHeigth;
     }
 
     public int getX() {
@@ -67,5 +84,12 @@ public class Entity {
     public void tick(){
         System.out.println("");
 
+    }
+
+    public static boolean isColliding(Entity entity1, Entity entity2){
+        Rectangle e1Mask = new Rectangle(entity1.getX() + entity1.maskX, entity1.getY() + entity1.maskY, entity1.maskWidth, entity1.maskHeigth);
+        Rectangle e2Mask = new Rectangle(entity2.getX() + entity2.maskX, entity2.getY() + entity2.maskY, entity2.maskWidth, entity2.maskHeigth);
+
+        return e1Mask.intersects(e2Mask);
     }
 }

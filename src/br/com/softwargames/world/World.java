@@ -41,14 +41,17 @@ public class World {
                         Game.enemies.add(enemy);
                     } else if(pixelAtual == 0xFFFF00DC){
                         //Lifepack
-                        Game.entities.add(new Lifepack(xx*16, yy*16, 16, 16, Entity.LIFEPACK));
+                        Lifepack lifepack = new Lifepack(xx*16, yy*16, 16, 16, Entity.LIFEPACK);
+                        Game.entities.add(lifepack);
                     } else if(pixelAtual == 0xFFFFD800){
                         //Ammo
-                        Game.entities.add(new Ammo(xx*16, yy*16, 16, 16, Entity.AMMO));
+                        Ammo ammo = new Ammo(xx*16, yy*16, 16, 16, Entity.AMMO);
+                        Game.entities.add(ammo);
 
                     } else if(pixelAtual == 0xFF808080){
                         //Weapon
-                        Game.entities.add(new Weapon(xx*16, yy*16, 16, 16, Entity.WEAPON));
+                        Weapon weapon = new Weapon(xx*16, yy*16, 16, 16, Entity.WEAPON);
+                        Game.entities.add(weapon);
                     }
                 }
             }

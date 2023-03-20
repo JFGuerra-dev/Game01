@@ -6,6 +6,7 @@ import br.com.softwargames.world.World;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Iterator;
 
 public class Player extends Entity{
 
@@ -19,6 +20,8 @@ public class Player extends Entity{
     private int index = 0;
     private final int MAX_INDEX = 1;
     private boolean moved;
+    public static double life = 100;
+    public static final double MAX_LIFE = 100;
     public Player(int x, int y, int width, int heigth, BufferedImage sprite) {
         super(x, y, width, heigth, sprite);
         rightPlayer = new BufferedImage[2];
@@ -60,11 +63,42 @@ public class Player extends Entity{
                 if(index > MAX_INDEX) index = 0;
             }
         }
+
+        this.checkItems();
+
         Camera.x = Camera.clamp(this.getX() - (Game.WIDTH/2), 0, World.WIDTH*16 - Game.WIDTH);
         Camera.y = Camera.clamp(this.getY() - (Game.HEIGTH/2), 0, World.HEIGTH*16 - Game.HEIGTH);
     }
 
+    public void checkItems(){
 
+        Iterator<Entity> itr = Game.entities.iterator();
+        while(itr.hasNext()){
+            Entity currentEntity = itr.next();
+            if(currentEntity instanceof Lifepack){
+                if(Entity.isColliding(this, currentEntity)){
+                    life += 8;
+                    if(life > 100) life = 100;
+                    itr.remove();
+                    return;
+                }
+            }
+        }
+
+
+//        for(int i = 0;i < Game.entities.size();i++){
+//            Entity atual = Game.entities.get(i);
+//            if(atual instanceof Lifepack){
+//                if(Entity.isColliding(this, atual)){
+//                    life += 8;
+//                    if(life > 100)
+//                        life = 100;
+//                    Game.entities.remove(atual);
+//                    return;
+//                }
+//            }
+//        }
+    }
 
     @Override
     public void render(Graphics g){

@@ -4,6 +4,7 @@ import br.com.softwargames.entities.Enemy;
 import br.com.softwargames.entities.Entity;
 import br.com.softwargames.entities.Player;
 import br.com.softwargames.graficos.Spritesheet;
+import br.com.softwargames.graficos.UI;
 import br.com.softwargames.world.World;
 
 import javax.swing.*;
@@ -36,13 +37,14 @@ public class Game extends Canvas implements Runnable, KeyListener {
     public static List<Enemy> enemies;
     public static Player player;
     public static World world;
-
     public static Random rand;
+    public UI ui;
     public Game(){
         rand = new Random();
         addKeyListener(this);
         setPreferredSize(new Dimension(WIDTH*SCALE, HEIGTH*SCALE));
         initFrame();
+        ui = new UI();
         image = new BufferedImage(WIDTH, HEIGTH, BufferedImage.TYPE_INT_RGB);
         entities = new ArrayList<>();
         enemies = new ArrayList<>();
@@ -99,7 +101,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
             //Renderização do game
             world.render(g);
             for(Entity entity : entities) entity.render(g);
-
+            ui.render(g);
             g.dispose();
             g = bs.getDrawGraphics();
             g.drawImage(image, 0, 0, WIDTH*SCALE, HEIGTH*SCALE, null); //Desenhar na tela o que foi manipulado
