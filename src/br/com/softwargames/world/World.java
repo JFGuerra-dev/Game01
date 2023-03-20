@@ -10,9 +10,10 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class World {
-    private Tile[] tiles;
+    public static Tile[] tiles;
     public static int WIDTH;
     public static int HEIGTH;
+    public static final int TILE_SIZE = 16;
     public World(String path){
         try {
             BufferedImage map = ImageIO.read(Objects.requireNonNull(getClass().getResource(path)));
@@ -35,7 +36,9 @@ public class World {
                         Game.player.setY(yy*16);
                     } else if(pixelAtual == 0xFFFF0000){
                         //Enemy
-                        Game.entities.add(new Enemy(xx*16, yy*16, 16, 16, Entity.ENEMY));
+                        Enemy enemy = new Enemy(xx*16, yy*16, 16, 16, Entity.ENEMY);
+                        Game.entities.add(enemy);
+                        Game.enemies.add(enemy);
                     } else if(pixelAtual == 0xFFFF00DC){
                         //Lifepack
                         Game.entities.add(new Lifepack(xx*16, yy*16, 16, 16, Entity.LIFEPACK));
@@ -70,5 +73,25 @@ public class World {
                 tile.render(g);
             }
         }
+    }
+
+    public static boolean placeFree(int xnext, int ynext) {
+        int xTile1 = xnext / TILE_SIZE;
+        int yTile1 = ynext / TILE_SIZE;
+
+        int xTile2 = (xnext + TILE_SIZE - 1) / TILE_SIZE;
+        int yTile2 = ynext / TILE_SIZE;
+
+        int xTile3 = xnext / TILE_SIZE;
+        int yTile3 = (ynext + TILE_SIZE - 1)/ TILE_SIZE;
+
+        int xTile4 = (xnext + TILE_SIZE - 1) / TILE_SIZE;
+        int yTile4 = (ynext + TILE_SIZE - 1) / TILE_SIZE;
+
+        return !((tiles[xTile1 + (yTile1 * World.WIDTH)] instanceof WallTile)
+                || (tiles[xTile2 + (yTile2 * World.WIDTH)] instanceof WallTile)
+                || (tiles[xTile3 + (yTile3 * World.WIDTH)] instanceof WallTile)
+                || (tiles[xTile4 + (yTile4 * World.WIDTH)] instanceof WallTile));
+
     }
 }

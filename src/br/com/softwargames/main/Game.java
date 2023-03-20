@@ -1,5 +1,6 @@
 package br.com.softwargames.main;
 
+import br.com.softwargames.entities.Enemy;
 import br.com.softwargames.entities.Entity;
 import br.com.softwargames.entities.Player;
 import br.com.softwargames.graficos.Spritesheet;
@@ -14,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Game extends Canvas implements Runnable, KeyListener {
 
@@ -31,14 +33,19 @@ public class Game extends Canvas implements Runnable, KeyListener {
     private Thread thread;
     public static Spritesheet spritesheet;
     public static List<Entity> entities;
+    public static List<Enemy> enemies;
     public static Player player;
     public static World world;
+
+    public static Random rand;
     public Game(){
+        rand = new Random();
         addKeyListener(this);
         setPreferredSize(new Dimension(WIDTH*SCALE, HEIGTH*SCALE));
         initFrame();
         image = new BufferedImage(WIDTH, HEIGTH, BufferedImage.TYPE_INT_RGB);
         entities = new ArrayList<>();
+        enemies = new ArrayList<>();
         spritesheet = new Spritesheet("/spritesheet.png");
         player = new Player(0, 0, 16, 16, spritesheet.getSprite(33, 0, 16, 16));
         world = new World("/map.png");
@@ -110,6 +117,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
         double delta = 0;
         int frames = 0;
         double timer = System.currentTimeMillis();
+        requestFocus();
         while(isRunning){
             long now = System.nanoTime();
             delta += (now - lastTime) / nanoSeconds;

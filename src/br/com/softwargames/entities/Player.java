@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 public class Player extends Entity{
 
     public boolean right, left, up, down;
-    public final double SPEED = 0.7;
+    public final double SPEED = 1.4;
     private final BufferedImage[] rightPlayer;
     private final BufferedImage[] leftPlayer;
     private BufferedImage centerPlayer;
@@ -37,18 +37,18 @@ public class Player extends Entity{
     @Override
     public void tick(){
         moved = false;
-        if(right){
+        if(right && World.placeFree((int)(x + SPEED), this.getY())){
             moved = true;
             x += SPEED;
-        } else if(left){
+        } else if(left && World.placeFree((int)(x - SPEED), this.getY())){
             moved = true;
             x -= SPEED;
         }
 
-        if(up){
+        if(up && World.placeFree(this.getX(), (int)(y - SPEED))){
             moved = true;
             y -= SPEED;
-        } else if(down){
+        } else if(down && World.placeFree(this.getX(), (int)(y + SPEED))){
             moved = true;
             y += SPEED;
         }
@@ -63,6 +63,9 @@ public class Player extends Entity{
         Camera.x = Camera.clamp(this.getX() - (Game.WIDTH/2), 0, World.WIDTH*16 - Game.WIDTH);
         Camera.y = Camera.clamp(this.getY() - (Game.HEIGTH/2), 0, World.HEIGTH*16 - Game.HEIGTH);
     }
+
+
+
     @Override
     public void render(Graphics g){
         if(right){
