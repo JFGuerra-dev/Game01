@@ -19,7 +19,7 @@ public class Enemy extends Entity{
     private int maskY = 0;
     private int maskWidth = 10;
     private int maskHeigth = 10;
-    public Enemy(double x, double y, int width, int heigth, BufferedImage sprite) {
+    public Enemy(int x, int y, int width, int heigth, BufferedImage sprite) {
         super(x, y, width, heigth, sprite);
 
         enemy = new BufferedImage[2];
@@ -33,27 +33,25 @@ public class Enemy extends Entity{
     public void tick(){
         if(!isCollidingWithPlayer()) {
             moved = false;
-            if ((int) x < Game.player.getX() && World.placeFree((int) (x + speed), this.getY()) && !isColliding((int) (x + speed), this.getY())) {
+            if (x < Game.player.getX() && World.placeFree((int) (x + speed), this.getY()) && !isColliding((int) (x + speed), this.getY())) {
                 moved = true;
                 x += speed;
-            } else if ((int) x > Game.player.getX() && World.placeFree((int) (x - speed), this.getY()) && !isColliding((int) (x - speed), this.getY())) {
+            } else if ( x > Game.player.getX() && World.placeFree((int) (x - speed), this.getY()) && !isColliding((int) (x - speed), this.getY())) {
                 moved = true;
                 x -= speed;
             }
 
-            if ((int) y < Game.player.getY() && World.placeFree(this.getX(), (int) (y + speed)) && !isColliding(this.getX(), (int) (y + speed))) {
+            if ( y < Game.player.getY() && World.placeFree(this.getX(), (int) (y + speed)) && !isColliding(this.getX(), (int) (y + speed))) {
                 moved = true;
                 y += speed;
-            } else if ((int) y > Game.player.getY() && World.placeFree(this.getX(), (int) (y - speed)) && !isColliding(this.getX(), (int) (y - speed))) {
+            } else if ( y > Game.player.getY() && World.placeFree(this.getX(), (int) (y - speed)) && !isColliding(this.getX(), (int) (y - speed))) {
                 moved = true;
                 y -= speed;
             }
         } else{
             if(Game.rand.nextInt(100) < 10){
-                Player.life -= Game.rand.nextInt(3);
-                if(Player.life <= 0){
-                    //Game Over
-                }
+                Game.player.life -= Game.rand.nextInt(3);
+                Game.player.isDamaged = true;
             }
         }
         if(moved){
@@ -79,8 +77,8 @@ public class Enemy extends Entity{
 
     public boolean isColliding(int xnext, int ynext){
         Rectangle currentEnemy = new Rectangle(xnext + maskX, ynext + maskY, maskWidth, maskHeigth);
-        Rectangle player = new Rectangle(Game.player.getX(), Game.player.getY(), 16, 16);
-        for(Enemy enemy : Game.enemies){
+        for(int i = 0;i < Game.enemies.size();i++){
+            Enemy enemy = Game.enemies.get(i);
             if(enemy == this) continue;
             Rectangle targetEnemy = new Rectangle(enemy.getX() + maskX, enemy.getY() + maskY, maskWidth, maskHeigth);
             if(currentEnemy.intersects(targetEnemy)) return true;

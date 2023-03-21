@@ -13,6 +13,9 @@ public class Entity {
     public static BufferedImage WEAPON = Game.spritesheet.getSprite(81, 0, 16, 16);
     public static BufferedImage AMMO = Game.spritesheet.getSprite(97, 0, 16, 16);
     public static BufferedImage ENEMY = Game.spritesheet.getSprite(66, 17, 16, 16);
+    public static BufferedImage WEAPON_LEFT = Game.spritesheet.getSprite(129, 0, 16, 16);
+    public static BufferedImage WEAPON_RIGHT = Game.spritesheet.getSprite(113, 0, 16, 16);
+
 
 
     protected double x;
@@ -25,7 +28,7 @@ public class Entity {
     private int maskWidth;
     private int maskHeigth;
 
-    public Entity(double x, double y, int width, int heigth, BufferedImage sprite) {
+    public Entity(int x, int y, int width, int heigth, BufferedImage sprite) {
         this.x = x;
         this.y = y;
         this.width = width;

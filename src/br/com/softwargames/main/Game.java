@@ -26,7 +26,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
     private static JFrame frame;
     public static final int WIDTH = 240;
     public static final int HEIGTH = 160;
-    private static final int SCALE = 4;
+    private static final int SCALE = 3;
     private static final double SECOND_AS_NS = 1000000000; //Um segundo no formato de nano segundos
     private static final double SECOND = 1000; //Um segundo no formato de milli segundos
     private static final double FPS = 60.0; //Taxa de atualização dos frames por segundo
@@ -50,8 +50,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
         enemies = new ArrayList<>();
         spritesheet = new Spritesheet("/spritesheet.png");
         player = new Player(0, 0, 16, 16, spritesheet.getSprite(33, 0, 16, 16));
-        world = new World("/map.png");
         entities.add(player);
+        world = new World("/map.png");
     }
 
     public void initFrame(){
@@ -85,7 +85,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
     }
 
     public void tick(){
-        for(Entity entity : entities) entity.tick();
+        for(int i = 0;i < entities.size();i++) entities.get(i).tick();
     }
 
     public void render(){
@@ -100,11 +100,17 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
             //Renderização do game
             world.render(g);
-            for(Entity entity : entities) entity.render(g);
+            for(int i = 0; i < entities.size();i++) {
+                Entity en = entities.get(i);
+                en.render(g);
+            }
             ui.render(g);
             g.dispose();
             g = bs.getDrawGraphics();
             g.drawImage(image, 0, 0, WIDTH*SCALE, HEIGTH*SCALE, null); //Desenhar na tela o que foi manipulado
+            g.setColor(Color.white);
+            g.setFont(new Font("arial", Font.BOLD, 17));
+            g.drawString("Munição: " + Player.ammo + " / " + Player.MAX_AMMO, 580, 30);
             bs.show(); //Mostrar gráficos na tela
 
         }
