@@ -19,6 +19,10 @@ public class Enemy extends Entity{
     private int maskY = 0;
     private int maskWidth = 10;
     private int maskHeigth = 10;
+    private int enemyLife = 30;
+    private boolean isDamaged = false;
+    private int damageFrames;
+
     public Enemy(int x, int y, int width, int heigth, BufferedImage sprite) {
         super(x, y, width, heigth, sprite);
 
@@ -62,11 +66,41 @@ public class Enemy extends Entity{
                 if(index > MAX_INDEX) index = 0;
             }
         }
+
+        checkCollisionBullet();
+        if(enemyLife <= 0){
+            Game.enemies.remove(this);
+            Game.entities.remove(this);
+        }
+
+        if(isDamaged){
+            this.damageFrames++;
+            if(this.damageFrames == 5){
+                this.damageFrames = 0;
+                isDamaged = false;
+            }
+        }
     }
 
     public void render(Graphics g){
         super.render(g);
-        g.drawImage(enemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+        if(!isDamaged){
+            g.drawImage(enemy[index], this.getX() - Camera.x, this.getY() - Camera.y, null);
+        } else {
+            g.drawImage(Entity.ENEMY_FEEDBACK, this.getX() - Camera.x, this.getY() - Camera.y, null);
+        }
+    }
+
+    public void checkCollisionBullet(){
+        for(int i = 0;i < Game.bullets.size();i++){
+            Entity entity = Game.bullets.get(i);
+            if(Entity.isColliding(this, entity)){
+                isDamaged = true;
+                enemyLife--;
+                Game.entities.remove(entity);
+                return;
+            }
+        }
     }
     public boolean isCollidingWithPlayer(){
         Rectangle currentEnemy = new Rectangle(this.getX() + maskX, this.getY() + maskY, maskWidth, maskHeigth);

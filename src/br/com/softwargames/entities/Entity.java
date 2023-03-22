@@ -13,6 +13,7 @@ public class Entity {
     public static BufferedImage WEAPON = Game.spritesheet.getSprite(81, 0, 16, 16);
     public static BufferedImage AMMO = Game.spritesheet.getSprite(97, 0, 16, 16);
     public static BufferedImage ENEMY = Game.spritesheet.getSprite(66, 17, 16, 16);
+    public static BufferedImage ENEMY_FEEDBACK = Game.spritesheet.getSprite(97, 17, 16, 16);
     public static BufferedImage WEAPON_LEFT = Game.spritesheet.getSprite(129, 0, 16, 16);
     public static BufferedImage WEAPON_RIGHT = Game.spritesheet.getSprite(113, 0, 16, 16);
 
@@ -85,7 +86,6 @@ public class Entity {
     }
 
     public void tick(){
-        System.out.println("");
 
     }
 

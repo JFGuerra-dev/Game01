@@ -3,6 +3,7 @@ package br.com.softwargames.entities;
 import br.com.softwargames.graficos.Spritesheet;
 import br.com.softwargames.main.Game;
 import br.com.softwargames.world.Camera;
+import br.com.softwargames.world.GameState;
 import br.com.softwargames.world.World;
 
 import java.awt.*;
@@ -24,7 +25,8 @@ public class Player extends Entity{
     private final int MAX_FRAMES = 10;
     private int index = 0;
     private final int MAX_INDEX = 1;
-    private boolean moved;
+    private boolean moved = false;
+    public boolean shoot = false;
     public double life = 100;
     public final double MAX_LIFE = 100;
     public static int ammo = 0;
@@ -88,16 +90,24 @@ public class Player extends Entity{
             }
         }
 
+        if(shoot){
+            shoot = false;
+            if(hasGun && ammo > 0) {
+                ammo--;
+                //Criar bala e atirar
+                int directionX = 1;
+                if (left) {
+                    directionX = -1;
+                }
+
+                BulletShoot bullet = new BulletShoot(this.getX(), this.getY(), 3, 3, null, directionX, 0);
+                Game.bullets.add(bullet);
+            }
+        }
+
         if(life <= 0){
-            Game.entities.clear();
-            Game.enemies.clear();
-            Game.entities = new ArrayList<>();
-            Game.enemies = new ArrayList<>();
-            Game.spritesheet = new Spritesheet("/spritesheet.png");
-            player = new Player(0, 0, 16, 16, Game.spritesheet.getSprite(33, 0, 16, 16));
-            Game.entities.add(Game.player);
-            Game.world = new World("/map.png");
-            return;
+            life = 0;
+            Game.gameState = GameState.GAME_OVER;
         }
 
         Camera.x = Camera.clamp(this.getX() - (Game.WIDTH/2), 0, World.WIDTH*16 - Game.WIDTH);

@@ -1,13 +1,17 @@
 package br.com.softwargames.world;
 
 import br.com.softwargames.entities.*;
+import br.com.softwargames.graficos.Spritesheet;
 import br.com.softwargames.main.Game;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
+
+import static br.com.softwargames.main.Game.player;
 
 public class World {
     public static Tile[] tiles;
@@ -96,5 +100,17 @@ public class World {
                 || (tiles[xTile3 + (yTile3 * World.WIDTH)] instanceof WallTile)
                 || (tiles[xTile4 + (yTile4 * World.WIDTH)] instanceof WallTile));
 
+    }
+
+    public static void restartWorld(String level){
+        Game.entities.clear();
+        Game.enemies.clear();
+        Game.entities = new ArrayList<>();
+        Game.enemies = new ArrayList<>();
+        Game.spritesheet = new Spritesheet("/spritesheet.png");
+        player = new Player(0, 0, 16, 16, Game.spritesheet.getSprite(33, 0, 16, 16));
+        Game.entities.add(Game.player);
+        Game.world = new World("/"+level);
+        return;
     }
 }
